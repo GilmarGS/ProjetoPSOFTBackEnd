@@ -1,5 +1,6 @@
 package ajude.psoft.entidades;
 
+import ajude.psoft.entidades.Comentario;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,12 +32,12 @@ public class Campanha {
 	
 	
 	
-	public Campanha(long id, String nome, String descricao, String deadline, StatusEnum status, double meta, double doacao, String donoDaCampanha, ArrayList<Comentario> comentarios, int like) {
+	public Campanha(long id, String nome, String descricao, String deadline, double meta, double doacao, String donoDaCampanha, ArrayList<Comentario> comentarios, int like) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.deadline = deadline;
-		this.status = status;
+		this.status = StatusEnum.ATIVA;
 		this.meta = meta;
 		this.doacao = doacao;
 		this.donoDaCampanha = donoDaCampanha;

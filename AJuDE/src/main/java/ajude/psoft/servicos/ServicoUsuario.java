@@ -1,5 +1,7 @@
 package ajude.psoft.servicos;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import ajude.psoft.daos.UsuariosRepository;
@@ -16,7 +18,7 @@ public class ServicoUsuario {
 	
 	public Usuario adicionaUsuario(Usuario usuario) {
 		if(temEmail(usuario)) {
-			throw new IllegalArgumentException("Digite um email!");
+			throw new IllegalArgumentException("Digite um email valido!");
 		}
 		if(usuarioExiste(usuario)) {
 			throw new IllegalArgumentException("Usuario ja esta cadastrado!");
@@ -34,5 +36,8 @@ public class ServicoUsuario {
 		}
 		
 		return true;
+	}
+	public Optional<Usuario> getUsuario(String email) {
+		return this.usuariosDAO.findByEmail(email);
 	}
 }
