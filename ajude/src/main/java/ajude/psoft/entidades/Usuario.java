@@ -15,7 +15,6 @@ public class Usuario {
 
 	public Usuario() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Usuario(String email, String nome, String ultimoNome, String numCartaoDeCredito, String senha) {

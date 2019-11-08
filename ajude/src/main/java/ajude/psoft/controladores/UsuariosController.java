@@ -20,21 +20,22 @@ import ajude.psoft.servicos.UsuariosService;
 @RestController
 public class UsuariosController {
 	
-	private EmailService enviaEmail;
+	private EmailService emailService;
 	private UsuariosService usuariosService;
 	private JWTService jwtService;
 
-	public UsuariosController(UsuariosService usuariosService, JWTService jwtService) {
+	public UsuariosController(UsuariosService usuariosService, JWTService jwtService, EmailService emailService) {
 		super();
 		this.usuariosService = usuariosService;
 		this.jwtService = jwtService;
+		this.emailService = emailService;
 	}
 
-	@PostMapping("/api/usuarios")
-	@RequestMapping(value="/singup", method = RequestMethod.POST)
-	public ResponseEntity<Usuario> adicionaUsuario(@RequestBody Usuario usuario) {
-		enviaEmail.enviaEmailBoasVindas(usuario.getEmail());
-		return new ResponseEntity<Usuario>(this.usuariosService.adicionaUsuario(usuario), HttpStatus.OK);
+	//@PostMapping("/api/usuarios")
+	@RequestMapping(value="/signup", method = RequestMethod.POST)
+	public Usuario adicionaUsuario(@RequestBody Usuario usuario) {
+		emailService.enviaEmailBoasVindas(usuario.getEmail());
+		return this.usuariosService.adicionaUsuario(usuario);
 	}
 
 	@GetMapping("/auth/usuarios/{email}")

@@ -1265,3 +1265,9 @@ Caused by: java.lang.IllegalStateException: The file is locked: nio:C:/Users/Gil
 	at org.h2.mvstore.FileStore.open(FileStore.java:172)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:390)
 	... 62 more
+2019-11-08 01:29:14 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE LIKE[*] (ID BIGINT NOT NULL, LIKES INTEGER NOT NULL, ID_CAMPANHA BIGINT NOT NULL, PRIMARY KEY (ID)) "; expected "identifier"; SQL statement:
+create table like (id bigint not null, likes integer not null, id_campanha bigint not null, primary key (id)) [42001-199]
+2019-11-08 01:29:14 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE LIKE[*] ADD CONSTRAINT FKHTFCBCWJP7GY525SW5H91UBQT FOREIGN KEY (ID_CAMPANHA) REFERENCES CAMPANHA "; expected "identifier"; SQL statement:
+alter table like add constraint FKhtfcbcwjp7gy525sw5h91ubqt foreign key (id_campanha) references campanha [42001-199]
