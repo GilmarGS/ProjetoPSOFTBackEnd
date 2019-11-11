@@ -14,19 +14,32 @@ public class Comentario {
 	@Id
 	@GeneratedValue
 	private long idComentario;
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "idCampanha")
+	private String Comentarios;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="idCampanha")
 	@JsonIgnore
 	private Campanha campanha;
-	private String comentarios;
 	
 	public Comentario() {
-		super();
+		
 	}
 	
-	public Comentario(long idComentario, String comentarios, Campanha campanha) {
-		this.idComentario = idComentario;
-		this.comentarios = comentarios;
+	public Comentario(String comentarios, Campanha campanha) {
+		this.Comentarios = comentarios;
 		this.campanha = campanha;
 	}
+
+	public long getIdComentario() {
+		return idComentario;
+	}
+
+	public String getComentarios() {
+		return Comentarios;
+	}
+
+	public Campanha getCampanha() {
+		return campanha;
+	}
+	
+	
 }

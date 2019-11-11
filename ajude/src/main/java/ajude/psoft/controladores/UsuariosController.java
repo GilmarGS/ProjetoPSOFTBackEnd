@@ -31,11 +31,10 @@ public class UsuariosController {
 		this.emailService = emailService;
 	}
 
-	//@PostMapping("/api/usuarios")
-	@RequestMapping(value="/signup", method = RequestMethod.POST)
-	public Usuario adicionaUsuario(@RequestBody Usuario usuario) {
+	@PostMapping("/api/usuarios")
+	public ResponseEntity<Usuario> adicionaUsuario(@RequestBody Usuario usuario) {
 		emailService.enviaEmailBoasVindas(usuario.getEmail());
-		return this.usuariosService.adicionaUsuario(usuario);
+		return new ResponseEntity<Usuario>(this.usuariosService.adicionaUsuario(usuario), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/auth/usuarios/{email}")

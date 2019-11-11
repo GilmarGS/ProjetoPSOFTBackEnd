@@ -10,8 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,33 +23,105 @@ public class Campanha {
 	@GeneratedValue
 	private long idCampanha;
 	private String nomeCurto;
-	//identificador de URL único da campanha (gerado pelo frontend a partir do nome curto)
 	private String descricao;
 	private String deadlineArrecadacao;
 	private EnumStatus status;
 	private double meta;
 	private double doacoes;
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "email")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="email")
 	@JsonIgnore
-	private Usuario dono; 
-	@OneToMany(mappedBy = "campanha", fetch = FetchType.EAGER)
-	private List<Comentario> comentarios;
-	@OneToMany(mappedBy = "campanha", fetch = FetchType.EAGER)
-	private Set<Like> likes;
+	private Usuario dono; 	
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name="idComentario")
+	@JsonIgnore
+	private Set<Comentario> comentarios;
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name="idLike")
+	private List<Like> likes;
 	
 	public Campanha() {
-		super();
+		
 	}
-	public Campanha(long idCampanha, String nomeCurto, String descricao, String deadlineArrecadacao, double meta, double doacoes, Usuario dono, List<Comentario> comentarios, Set<Like> likes) {
-		this.idCampanha = idCampanha;
+	
+	public Campanha(String nomeCurto, String descricao, String deadlineArrecadacao, EnumStatus status, double meta, double doacoes, Usuario dono, Set<Comentario> comentarios, List<Like> likes) {
 		this.nomeCurto = nomeCurto;
 		this.descricao = descricao;
 		this.deadlineArrecadacao = deadlineArrecadacao;
 		this.status = EnumStatus.ATIVA;
 		this.meta = meta;
 		this.doacoes = doacoes;
-		this.comentarios = new ArrayList<Comentario>();
-		this.likes = new HashSet<Like>();
+		this.dono = dono;
+		this.comentarios = new HashSet<Comentario>();
+		this.likes = new ArrayList<>();		
+	}
+	public long getIdCampanha() {
+		return idCampanha;
+	}
+
+	public void setIdCampanha(long idCampanha) {
+		this.idCampanha = idCampanha;
+	}
+
+	public String getNomeCurto() {
+		return nomeCurto;
+	}
+
+	public void setNomeCurto(String nomeCurto) {
+		this.nomeCurto = nomeCurto;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public String getDeadlineArrecadacao() {
+		return deadlineArrecadacao;
+	}
+
+	public void setDeadlineArrecadacao(String deadlineArrecadacao) {
+		this.deadlineArrecadacao = deadlineArrecadacao;
+	}
+
+	public EnumStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(EnumStatus status) {
+		this.status = status;
+	}
+
+	public double getMeta() {
+		return meta;
+	}
+
+	public void setMeta(double meta) {
+		this.meta = meta;
+	}
+
+	public double getDoacoes() {
+		return doacoes;
+	}
+
+	public void setDoacoes(double doacoes) {
+		this.doacoes = doacoes;
+	}
+
+	public Usuario getDono() {
+		return dono;
+	}
+
+	
+	public Set<Comentario> getComentarios() {
+		return comentarios;
+	}
+
+	public List<Like> getLikes() {
+		return this.likes;
 	}
 }
+	

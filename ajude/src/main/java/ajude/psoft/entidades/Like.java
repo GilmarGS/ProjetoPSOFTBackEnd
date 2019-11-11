@@ -13,20 +13,27 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Like {
 	@Id
 	@GeneratedValue
-	private long id;
+	private long idLike;
+	private int likes;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "idCampanha")
 	@JsonIgnore
 	private Campanha campanha;
-	private int likes;
 	
 	public Like() {
-		super();
+		
 	}
-	
-	public Like(long id, Campanha campanha, int likes) {
-		this.id = id;
-		this.campanha = campanha;
+	public Like(int likes, Campanha campanha) {
 		this.likes = likes;
+		this.campanha = campanha;
+	}
+	public long getIdLike() {
+		return idLike;
+	}
+	public int getLikes() {
+		return likes;
+	}
+	public Campanha getCampanha() {
+		return campanha;
 	}
 }
