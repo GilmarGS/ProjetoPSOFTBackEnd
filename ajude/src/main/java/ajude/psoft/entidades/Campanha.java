@@ -32,19 +32,19 @@ public class Campanha {
 	@JoinColumn(name="email")
 	@JsonIgnore
 	private Usuario dono; 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="idComentario")
 	@JsonIgnore
 	private Set<Comentario> comentarios;
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name="idLike")
-	private List<Like> likes;
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name="email")
+	private List<Usuario> likes;
 	
 	public Campanha() {
 		
 	}
 	
-	public Campanha(String nomeCurto, String descricao, String deadlineArrecadacao, EnumStatus status, double meta, double doacoes, Usuario dono, Set<Comentario> comentarios, List<Like> likes) {
+	public Campanha(String nomeCurto, String descricao, String deadlineArrecadacao, EnumStatus status, double meta, double doacoes, Usuario dono, Set<Comentario> comentarios, List<Usuario> likes) {
 		this.nomeCurto = nomeCurto;
 		this.descricao = descricao;
 		this.deadlineArrecadacao = deadlineArrecadacao;
@@ -53,7 +53,7 @@ public class Campanha {
 		this.doacoes = doacoes;
 		this.dono = dono;
 		this.comentarios = new HashSet<Comentario>();
-		this.likes = new ArrayList<>();		
+		this.likes = new ArrayList<>();
 	}
 	public long getIdCampanha() {
 		return idCampanha;
@@ -120,8 +120,8 @@ public class Campanha {
 		return comentarios;
 	}
 
-	public List<Like> getLikes() {
+	/*public List<Like> getLikes() {
 		return this.likes;
-	}
+	}*/
 }
 	
