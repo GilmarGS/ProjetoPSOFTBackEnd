@@ -7,5 +7,7 @@ public enum EnumStatus {
 	EnumStatus(String status) {
 		this.statusCampanha = status;
 	}
-	
+	public String getStatus() {
+		return this.statusCampanha;
+	}
 }

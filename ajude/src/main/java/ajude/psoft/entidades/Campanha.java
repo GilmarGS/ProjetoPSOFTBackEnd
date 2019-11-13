@@ -9,11 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.OneToOne;
 
 import ajude.psoft.enums.EnumStatus;
 
@@ -28,24 +25,25 @@ public class Campanha {
 	private EnumStatus status;
 	private double meta;
 	private double doacoes;
-	//private Usuario dono; 	
+	@OneToOne(fetch = FetchType.EAGER)
+	private Usuario dono; 	
 	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name="idComentario")
-	@JsonIgnore
 	private Set<Comentario> comentarios;
-	//private List<Usuario> likes;
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<Usuario> likes;
 	
 	public Campanha() {
 		
 	}
 	
-	public Campanha(String nomeCurto, String descricao, String deadlineArrecadacao, EnumStatus status, double meta, double doacoes, Usuario dono, Set<Comentario> comentarios, List<Usuario> likes) {
+	public Campanha(String nomeCurto, String descricao, String deadlineArrecadacao, EnumStatus status, double meta, double doacoes, Usuario dono) {
 		this.nomeCurto = nomeCurto;
 		this.descricao = descricao;
 		this.deadlineArrecadacao = deadlineArrecadacao;
-		this.status = EnumStatus.ATIVA;
+		this.status = status;
 		this.meta = meta;
 		this.doacoes = doacoes;
+		this.dono = dono;
 		this.comentarios = new HashSet<Comentario>();
 
 	}
@@ -104,12 +102,20 @@ public class Campanha {
 	public void setDoacoes(double doacoes) {
 		this.doacoes = doacoes;
 	}
-
 	
 	public Set<Comentario> getComentarios() {
 		return comentarios;
 	}
 
+	public Usuario getDono() {
+		return dono;
+	}
+
+	public void setDono(Usuario dono) {
+		this.dono = dono;
+	}
+	
+	
 
 }
 	

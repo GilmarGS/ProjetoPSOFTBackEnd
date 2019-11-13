@@ -3,6 +3,7 @@ package ajude.psoft.servicos;
 import org.springframework.stereotype.Service;
 
 import ajude.psoft.entidades.Campanha;
+import ajude.psoft.entidades.Usuario;
 import ajude.psoft.repositories.CamapanhasRepository;
 
 @Service
@@ -14,6 +15,7 @@ public class CampanhasService {
 	}
 	
 	public Campanha adicionaCampanha(Campanha campanha) {
+		
 		return this.camapanhasRepository.save(campanha);
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import ajude.psoft.entidades.Campanha;
+import ajude.psoft.entidades.Usuario;
 import ajude.psoft.servicos.CampanhasService;
 
 @RestController
@@ -19,7 +20,7 @@ public class CampanhasController {
 	}
 	
 	@PostMapping("api/campanhas")
-	public ResponseEntity<Campanha> adicionaCampanha(@RequestBody Campanha campanha,  @RequestHeader("Authorization") String header){
+	public ResponseEntity<Campanha> adicionaCampanha(@RequestBody Campanha campanha){
 		return new ResponseEntity<Campanha>(this.campanhasService.adicionaCampanha(campanha), HttpStatus.CREATED);
 	}
 }
