@@ -28,17 +28,12 @@ public class Campanha {
 	private EnumStatus status;
 	private double meta;
 	private double doacoes;
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="email")
-	@JsonIgnore
-	private Usuario dono; 	
+	//private Usuario dono; 	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="idComentario")
 	@JsonIgnore
 	private Set<Comentario> comentarios;
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name="email")
-	private List<Usuario> likes;
+	//private List<Usuario> likes;
 	
 	public Campanha() {
 		
@@ -51,9 +46,8 @@ public class Campanha {
 		this.status = EnumStatus.ATIVA;
 		this.meta = meta;
 		this.doacoes = doacoes;
-		this.dono = dono;
 		this.comentarios = new HashSet<Comentario>();
-		this.likes = new ArrayList<>();
+
 	}
 	public long getIdCampanha() {
 		return idCampanha;
@@ -111,17 +105,11 @@ public class Campanha {
 		this.doacoes = doacoes;
 	}
 
-	public Usuario getDono() {
-		return dono;
-	}
-
 	
 	public Set<Comentario> getComentarios() {
 		return comentarios;
 	}
 
-	/*public List<Like> getLikes() {
-		return this.likes;
-	}*/
+
 }
 	
