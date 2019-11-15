@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,12 +32,14 @@ public class UsuariosController {
 		this.emailService = emailService;
 	}
 
+	@CrossOrigin
 	@PostMapping("/api/usuarios")
 	public ResponseEntity<Usuario> adicionaUsuario(@RequestBody Usuario usuario) {
-		emailService.enviaEmailBoasVindas(usuario.getEmail());
+		//emailService.enviaEmailBoasVindas(usuario.getEmail());
 		return new ResponseEntity<Usuario>(this.usuariosService.adicionaUsuario(usuario), HttpStatus.CREATED);
 	}
-
+	
+	@CrossOrigin
 	@GetMapping("/auth/usuarios/{email}")
 	public ResponseEntity<Usuario> adicionaUsuario(@PathVariable String email) {
 		Optional<Usuario> usuario = this.usuariosService.getUsuario(email);
