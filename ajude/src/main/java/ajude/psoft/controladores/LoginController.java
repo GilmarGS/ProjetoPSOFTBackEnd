@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import javax.servlet.ServletException;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ajude.psoft.entidades.Usuario;
@@ -15,6 +17,7 @@ import ajude.psoft.servicos.UsuariosService;
 
 @RestController
 @RequestMapping("/auth")
+
 public class LoginController {
 
 	private UsuariosService usuariosService;
@@ -25,7 +28,9 @@ public class LoginController {
 		this.usuariosService = usuariosService;
 		this.jwtService = jwtService;
 	}
-
+	
+	@CrossOrigin
+	@ResponseBody
 	@PostMapping("/login")
 	public LoginResponse authenticate(@RequestBody Usuario usuario) throws ServletException {
 
