@@ -2,6 +2,8 @@ package ajude.psoft.controladores;
 
 import java.util.Optional;
 
+import javax.servlet.ServletException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,13 +34,21 @@ public class UsuariosController {
 		this.jwtService = jwtService;
 		this.emailService = emailService;
 	}
-
+	
 	@CrossOrigin
-	@PostMapping("/api/usuarios")
+	@PostMapping("api/usuarios")
 	@ResponseBody
-	public ResponseEntity<Usuario> adicionaUsuario(@RequestBody Usuario usuario) {
+	public ResponseEntity<Usuario> adicionaUsuario(@RequestBody Usuario usuario) throws ServletException{
+		if(usuario.getEmail() == null || usuario.getEmail().equals("")) {
+			throw new NullPointerException("Email nao pode ser vazio!");
+		}
+		
+		if(existeUsuario(usuario)) {
+			throw new ServletException("Usuario ja esta cadastrado!");
+		}
 		//emailService.enviaEmailBoasVindas(usuario.getEmail());
-		return new ResponseEntity<Usuario>(this.usuariosService.adicionaUsuario(usuario), HttpStatus.CREATED);
+		return new ResponseEntity<Usuario>(usuariosService.adicionaUsuario(usuario), HttpStatus.CREATED);
+		
 	}
 	
 	@CrossOrigin
@@ -49,5 +59,9 @@ public class UsuariosController {
 			return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
 
 		return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
+	}
+	private boolean existeUsuario(Usuario usuario){
+		Optional<Usuario> authUsuario = usuariosService.getUsuario(usuario.getEmail());
+		return authUsuario.isPresent();
 	}
 }

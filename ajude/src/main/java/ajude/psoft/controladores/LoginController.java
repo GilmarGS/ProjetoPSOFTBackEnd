@@ -38,11 +38,11 @@ public class LoginController {
 		Optional<Usuario> authUsuario = usuariosService.getUsuario(usuario.getEmail());
 
 		// verificacoes
-		/*if (!authUsuario.isPresent()) {
+		if (!authUsuario.isPresent()) {
 			throw new ServletException("Usuario nao encontrado!");
-		}*/
+		}
 
-		//verificaSenha(usuario, authUsuario);
+		verificaSenha(usuario, authUsuario);
 
 		String token = jwtService.geraToken(authUsuario.get().getEmail());
 

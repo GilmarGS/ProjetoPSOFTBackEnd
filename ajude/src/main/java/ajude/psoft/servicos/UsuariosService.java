@@ -26,5 +26,8 @@ public class UsuariosService {
 	public Optional<Usuario> getUsuario(String email) {
 		return this.usuariosDAO.findByEmail(email);
 	}
-
+	
+	public Optional<Usuario> isPresent(String email) {
+		return this.usuariosDAO.findById(email);
+	}
 }
