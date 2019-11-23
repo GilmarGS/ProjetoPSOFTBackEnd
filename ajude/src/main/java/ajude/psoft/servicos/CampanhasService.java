@@ -2,7 +2,6 @@ package ajude.psoft.servicos;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -39,9 +38,35 @@ public class CampanhasService {
 				
 		return resultado;
 	}
+	public Campanha recuperaCampanhaIdUrl(String idUrl) {		
+		return recuperaIdUrl(idUrl);
+	}
+	
+	private Campanha recuperaIdUrl(String idUrl){
+		List<Campanha> campanhaUrl = campanhasRepository.findAll();
+		Campanha campanha = null;
+		for(Campanha c : campanhaUrl){
+			if(c.getIdURL().equals(idUrl)){
+				campanha = c;
+			}
+		}
+		return campanha;
+	}
 	
 	private String retiraAcentos(String input){ 
 		return input.replaceAll("á|à|â|ã","a") .replaceAll("é|ê","e") .replace("í|î","i") .replace("ó|ô|õ","o") .replace("ú","u") .replace("ç", "c"); 
 		
 	}
+	public Boolean confereIdURL(Campanha campanha) {
+		List<Campanha> campanhaURL = campanhasRepository.findAll();
+		boolean retorno = false;
+		for(Campanha c : campanhaURL) {
+			if(c.getIdURL().equals(campanha.getIdURL())) {
+				retorno = true;
+			}
+		}
+		return retorno;
+	}
+
+
 }

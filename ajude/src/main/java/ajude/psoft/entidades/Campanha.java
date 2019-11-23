@@ -20,6 +20,7 @@ public class Campanha {
 	@GeneratedValue
 	private long idCampanha;
 	private String nomeCurto;
+	private String idURL;
 	private String descricao;
 	private String deadlineArrecadacao;
 	private EnumStatus status;
@@ -36,8 +37,9 @@ public class Campanha {
 		
 	}
 	
-	public Campanha(String nomeCurto, String descricao, String deadlineArrecadacao, EnumStatus status, double meta, double doacoes, Usuario dono) {
+	public Campanha(String nomeCurto, String idURL, String descricao, String deadlineArrecadacao, EnumStatus status, double meta, double doacoes, Usuario dono) {
 		this.nomeCurto = nomeCurto;
+		this.idURL = idURL;
 		this.descricao = descricao;
 		this.deadlineArrecadacao = deadlineArrecadacao;
 		this.status = status;
@@ -45,8 +47,10 @@ public class Campanha {
 		this.doacoes = doacoes;
 		this.dono = dono;
 		this.comentarios = new HashSet<Comentario>();
+		this.likes = new ArrayList<>();
 
 	}
+	
 	public long getIdCampanha() {
 		return idCampanha;
 	}
@@ -106,16 +110,26 @@ public class Campanha {
 	public Set<Comentario> getComentarios() {
 		return comentarios;
 	}
+	
+	public void setComentarios(Comentario comentario){
+		this.comentarios.add(comentario);
+	}
 
 	public Usuario getDono() {
 		return dono;
 	}
 
-	public void setDono(Usuario dono) {
-		this.dono = dono;
+	public List<Usuario> getLikes() {
+		return likes;
 	}
-	
-	
+
+	public void setLikes(Usuario likes) {
+		this.likes.add(likes);
+	}
+
+	public String getIdURL() {
+		return this.idURL;
+	}
 
 }
 	
