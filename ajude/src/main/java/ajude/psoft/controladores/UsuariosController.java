@@ -22,6 +22,7 @@ import ajude.psoft.servicos.JWTService;
 import ajude.psoft.servicos.UsuariosService;
 
 @RestController
+@RequestMapping("api/usuarios")
 public class UsuariosController {
 	
 	private EmailService emailService;
@@ -36,7 +37,7 @@ public class UsuariosController {
 	}
 	
 	@CrossOrigin
-	@PostMapping("api/usuarios")
+	@PostMapping
 	@ResponseBody
 	public ResponseEntity<Usuario> adicionaUsuario(@RequestBody Usuario usuario) throws ServletException{
 		if(usuario.getEmail() == null || usuario.getEmail().equals("")) {

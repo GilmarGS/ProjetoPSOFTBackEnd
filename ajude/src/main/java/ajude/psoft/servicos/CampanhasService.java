@@ -3,14 +3,27 @@ package ajude.psoft.servicos;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletException;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ajude.psoft.entidades.Campanha;
+import ajude.psoft.entidades.Comentario;
+import ajude.psoft.entidades.Doacao;
+import ajude.psoft.entidades.Usuario;
 import ajude.psoft.repositories.CamapanhasRepository;
 
 @Service
 public class CampanhasService {
 	private CamapanhasRepository<Campanha, Long> campanhasRepository;
+	
+	@Autowired
+	private ComentariosService comentariosService;
+	
+	@Autowired
+	private DoacoesService doacoesService;
 	
 	public CampanhasService(CamapanhasRepository<Campanha, Long> campanhasRepository) {
 		this.campanhasRepository = campanhasRepository;		
@@ -28,9 +41,6 @@ public class CampanhasService {
 		
 		for(Campanha c : listaCampanha) {
 			String atual = retiraAcentos(c.getNomeCurto());
-			System.out.println(pesquisa.toUpperCase().contains(atual.toUpperCase()));
-			System.out.println(pesquisa);
-			System.out.println(atual);
 			if(atual.toUpperCase().contains(pesquisa.toUpperCase())) {
 				resultado.add(c);
 			}
@@ -68,5 +78,83 @@ public class CampanhasService {
 		return retorno;
 	}
 
+	private Campanha recuperaCampanhaId(long id) throws ServletException {
+		if(!this.campanhasRepository.existsById(id)) {
+			throw new ServletException("Campanha nao existe!");
+		}
+		return this.campanhasRepository.findById(id).get();
+	}
+	
+	public Campanha adicionaComentario(long id, Comentario comentario) throws ServletException {
+		comentariosService.adicionaComentario(comentario);		
+		Campanha campanha = recuperaCampanhaId(id);
+		comentario.setCampanha(campanha);
+		campanha.getComentarios().add(comentario);
+		campanhasRepository.save(campanha);
+		
+		return campanha;
+		
+	}
+	
+	public Campanha apagaComentario(long Id, long comentarioId, Usuario usuario) throws ServletException {
+		String donoComentario = comentariosService.pegaComentarioId(comentarioId);
+		
+		if(!recuperaEmailUsuario(usuario).equals(donoComentario)) {
+			throw new ServletException("Voce nao tem permissao para apagar esse comentario!");
+		}
+		
+		Campanha campanha = recuperaCampanhaId(Id);
+		campanha.getComentarios().remove(comentariosService.achaId(comentarioId));
+		comentariosService.apagaPeloId(comentarioId);
+		campanhasRepository.save(campanha);
+		
+		return campanhasRepository.findById(Id).get();
+	}
+	
+	public Campanha adicionaLike(long id, Usuario usuario) throws ServletException {
+		Campanha campanha = recuperaCampanhaId(id);
+		if(novoLike(campanha.getLikes(), usuario)) {
+			throw new ServletException("Voce ja deu like nessa campanha");
+		}
+		campanha.getLikes().add(usuario);
+		campanhasRepository.save(campanha);
+		return campanha;
+	}
+	
+	public Campanha apagaLike(long id, Usuario usuario) throws ServletException {
+		Campanha campanha = recuperaCampanhaId(id);
+		if(!novoLike(campanha.getLikes(), usuario)) {
+			throw new ServletException("Voce ainda nao deu like nessa campanha");
+		}
+		campanha.getLikes().remove(usuario);
+		campanhasRepository.save(campanha);
+		return campanha;
+	}
+	
+	public Campanha adicionaDoacao(long id, Doacao doacao) throws ServletException {
+		doacoesService.adicionaDoacao(doacao);		
+		Campanha campanha = recuperaCampanhaId(id);
+		campanha.getDoacoes().add(doacao);
+		campanhasRepository.save(campanha);
+		
+		return campanha;
+		
+	}
+	
+	private String recuperaEmailUsuario(Usuario usuario) {
+		String emailUsuario = usuario.getEmail();
+		return emailUsuario;
+	}
 
+	private boolean novoLike(List<Usuario> likes, Usuario usuario) {
+		boolean retorno = false;
+		
+		for(Usuario l : likes) {
+			if(l.getEmail().equals(usuario.getEmail())) {
+				retorno = true;
+			}
+		}
+		return retorno;
+	}
 }
+

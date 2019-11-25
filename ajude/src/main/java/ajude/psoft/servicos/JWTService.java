@@ -26,7 +26,6 @@ public class JWTService {
 
 	public boolean usuarioExiste(String authorizationHeader) throws ServletException {
 		String subject = getSujeitoDoToken(authorizationHeader);
-
 		return usuariosService.getUsuario(subject).isPresent();
 	}
 	
@@ -36,8 +35,14 @@ public class JWTService {
 		Optional<Usuario> optUsuario = usuariosService.getUsuario(subject);
 		return optUsuario.isPresent() && optUsuario.get().getEmail().equals(email);
 	}
+	
+	public Usuario pegaUsuarioToken(String authorizationHeader) throws ServletException {
+		String subject = getSujeitoDoToken(authorizationHeader);
 
-	private String getSujeitoDoToken(String authorizationHeader) throws ServletException {
+		return this.usuariosService.findByEmail(subject);
+	}
+	
+	public String getSujeitoDoToken(String authorizationHeader) throws ServletException {
 		if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
 			throw new ServletException("Token inexistente ou mal formatado!");
 		}

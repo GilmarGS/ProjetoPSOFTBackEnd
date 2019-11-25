@@ -25,7 +25,8 @@ public class Campanha {
 	private String deadlineArrecadacao;
 	private EnumStatus status;
 	private double meta;
-	private double doacoes;
+	@OneToMany(fetch = FetchType.LAZY)
+	private Set<Doacao> doacoes;
 	@OneToOne(fetch = FetchType.EAGER)
 	private Usuario dono; 	
 	@OneToMany(fetch = FetchType.LAZY)
@@ -37,14 +38,14 @@ public class Campanha {
 		
 	}
 	
-	public Campanha(String nomeCurto, String idURL, String descricao, String deadlineArrecadacao, EnumStatus status, double meta, double doacoes, Usuario dono) {
+	public Campanha(String nomeCurto, String idURL, String descricao, String deadlineArrecadacao, double meta, Usuario dono) {
 		this.nomeCurto = nomeCurto;
 		this.idURL = idURL;
 		this.descricao = descricao;
 		this.deadlineArrecadacao = deadlineArrecadacao;
-		this.status = status;
+		this.status = EnumStatus.ATIVA;
 		this.meta = meta;
-		this.doacoes = doacoes;
+		this.doacoes = new HashSet<Doacao>();
 		this.dono = dono;
 		this.comentarios = new HashSet<Comentario>();
 		this.likes = new ArrayList<>();
@@ -99,11 +100,11 @@ public class Campanha {
 		this.meta = meta;
 	}
 
-	public double getDoacoes() {
+	public Set<Doacao> getDoacoes() {
 		return doacoes;
 	}
 
-	public void setDoacoes(double doacoes) {
+	public void setDoacoes(Set<Doacao> doacoes) {
 		this.doacoes = doacoes;
 	}
 	
@@ -117,6 +118,10 @@ public class Campanha {
 
 	public Usuario getDono() {
 		return dono;
+	}
+
+	public void setDono(Usuario dono) {
+		this.dono = dono;
 	}
 
 	public List<Usuario> getLikes() {

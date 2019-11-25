@@ -16,7 +16,7 @@ import ajude.psoft.servicos.JWTService;
 import ajude.psoft.servicos.UsuariosService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("api/usuarios/auth")
 
 public class LoginController {
 
