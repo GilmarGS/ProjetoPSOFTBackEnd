@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ajude.psoft.entidades.Usuario;
 import ajude.psoft.servicos.JWTService;
 import ajude.psoft.servicos.UsuariosService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+
+@Api(value = "Controller login")
 @RestController
 @RequestMapping("api/usuarios/auth")
 
@@ -28,7 +32,8 @@ public class LoginController {
 		this.usuariosService = usuariosService;
 		this.jwtService = jwtService;
 	}
-	
+
+	@ApiOperation(value = "cria um login e associa a um token")
 	@CrossOrigin
 	@ResponseBody
 	@PostMapping("/login")

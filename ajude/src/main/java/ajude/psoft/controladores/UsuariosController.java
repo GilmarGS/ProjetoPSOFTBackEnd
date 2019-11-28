@@ -20,7 +20,10 @@ import ajude.psoft.entidades.Usuario;
 import ajude.psoft.servicos.EmailService;
 import ajude.psoft.servicos.JWTService;
 import ajude.psoft.servicos.UsuariosService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+@Api(value = "Controller usuário")
 @RestController
 @RequestMapping("api/usuarios")
 public class UsuariosController {
@@ -35,7 +38,8 @@ public class UsuariosController {
 		this.jwtService = jwtService;
 		this.emailService = emailService;
 	}
-	
+
+	@ApiOperation(value = "Adiciona um usuário")
 	@CrossOrigin
 	@PostMapping
 	@ResponseBody
@@ -47,20 +51,11 @@ public class UsuariosController {
 		if(existeUsuario(usuario)) {
 			throw new ServletException("Usuario ja esta cadastrado!");
 		}
-		//emailService.enviaEmailBoasVindas(usuario.getEmail());
+		emailService.enviaEmailBoasVindas(usuario.getEmail());
 		return new ResponseEntity<Usuario>(usuariosService.adicionaUsuario(usuario), HttpStatus.CREATED);
 		
 	}
-	
-	@CrossOrigin
-	@GetMapping("/auth/usuarios/{email}")
-	public ResponseEntity<Usuario> adicionaUsuario(@PathVariable String email) {
-		Optional<Usuario> usuario = this.usuariosService.getUsuario(email);
-		if (usuario.isPresent())
-			return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
 
-		return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
-	}
 	private boolean existeUsuario(Usuario usuario){
 		Optional<Usuario> authUsuario = usuariosService.getUsuario(usuario.getEmail());
 		return authUsuario.isPresent();
