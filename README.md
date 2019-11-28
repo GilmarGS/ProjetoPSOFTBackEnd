@@ -45,3 +45,10 @@ O AJuDE é uma ferramenta que permite a organização de doações para projetos
     - /TokenFilter Responsável pela autorização do usuario para acesso ao sistema, validando ou não o token.
   - /enums Diretório onde encontra-se o arquivo EnumStatus
     - /EnumStatus Responsável por indicar os status possíveis de uma campanha.
+
+#Documentação da API:
+-A documentação da API gerada pelo Swagger
+
+#FrontEnd:
+-Repositório da aplicação do frontend
+-Link da aplicação no frontend
