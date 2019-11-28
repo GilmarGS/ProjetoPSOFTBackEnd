@@ -19,11 +19,11 @@ import ajude.psoft.entidades.Comentario;
 import ajude.psoft.entidades.Doacao;
 import ajude.psoft.entidades.Curtir;
 import ajude.psoft.entidades.Usuario;
-import ajude.psoft.repositories.CamapanhasRepository;
+import ajude.psoft.repositories.CampanhasRepository;
 
 @Service
 public class CampanhasService {
-	private CamapanhasRepository<Campanha, Long> campanhasRepository;
+	private CampanhasRepository<Campanha, Long> campanhasRepository;
 	
 	@Autowired
 	private ComparadorCampanhaDeadLine cd;
@@ -42,7 +42,7 @@ public class CampanhasService {
 	@Autowired
 	LikesService likesService;
 	
-	public CampanhasService(CamapanhasRepository<Campanha, Long> campanhasRepository) {
+	public CampanhasService(CampanhasRepository<Campanha, Long> campanhasRepository) {
 		this.campanhasRepository = campanhasRepository;		
 	}
 	
