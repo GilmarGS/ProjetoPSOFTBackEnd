@@ -1,7 +1,9 @@
 package ajude.psoft.servicos;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 
@@ -9,9 +11,13 @@ import javax.servlet.ServletException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ajude.psoft.comparadores.ComparadorCampanhaDeadLine;
+import ajude.psoft.comparadores.ComparadorCampanhaLikes;
+import ajude.psoft.comparadores.ComparadorCampanhaMeta;
 import ajude.psoft.entidades.Campanha;
 import ajude.psoft.entidades.Comentario;
 import ajude.psoft.entidades.Doacao;
+import ajude.psoft.entidades.Curtir;
 import ajude.psoft.entidades.Usuario;
 import ajude.psoft.repositories.CamapanhasRepository;
 
@@ -20,10 +26,21 @@ public class CampanhasService {
 	private CamapanhasRepository<Campanha, Long> campanhasRepository;
 	
 	@Autowired
+	private ComparadorCampanhaDeadLine cd;
+	
+	@Autowired
+	private ComparadorCampanhaLikes cl;
+	
+	@Autowired
+	private ComparadorCampanhaMeta cm;
+	
+	@Autowired
 	private ComentariosService comentariosService;
 	
 	@Autowired
 	private DoacoesService doacoesService;
+	@Autowired
+	LikesService likesService;
 	
 	public CampanhasService(CamapanhasRepository<Campanha, Long> campanhasRepository) {
 		this.campanhasRepository = campanhasRepository;		
@@ -113,32 +130,52 @@ public class CampanhasService {
 	
 	public Campanha adicionaLike(long id, Usuario usuario) throws ServletException {
 		Campanha campanha = recuperaCampanhaId(id);
-		if(novoLike(campanha.getLikes(), usuario)) {
-			throw new ServletException("Voce ja deu like nessa campanha");
+		Usuario dono = usuario;
+		Curtir like = new Curtir(dono);
+		if(verificaLike(campanha, dono)) {
+			Set<Curtir> likes = campanha.getLikes();
+			for(Curtir l : likes) {
+				if(l.getUsuario().equals(dono)) {
+					campanha.getLikes().remove(l);
+					likesService.apagaLike(l.getId());
+					campanhasRepository.save(campanha);
+				}
+			}
+			
+		}else {
+			likesService.adicionaLike(like);
+			campanha.getLikes().add(like);
+			campanhasRepository.save(campanha);
 		}
-		campanha.getLikes().add(usuario);
-		campanhasRepository.save(campanha);
 		return campanha;
 	}
 	
-	public Campanha apagaLike(long id, Usuario usuario) throws ServletException {
-		Campanha campanha = recuperaCampanhaId(id);
-		if(!novoLike(campanha.getLikes(), usuario)) {
-			throw new ServletException("Voce ainda nao deu like nessa campanha");
-		}
-		campanha.getLikes().remove(usuario);
-		campanhasRepository.save(campanha);
-		return campanha;
-	}
-	
-	public Campanha adicionaDoacao(long id, Doacao doacao) throws ServletException {
+	public Campanha adicionaDoacao(long id, Doacao doacao, double arrecadacao) throws ServletException {
 		doacoesService.adicionaDoacao(doacao);		
 		Campanha campanha = recuperaCampanhaId(id);
+		campanha.setValorArrecadado(arrecadacao);
 		campanha.getDoacoes().add(doacao);
 		campanhasRepository.save(campanha);
 		
 		return campanha;
 		
+	}
+	public List<Campanha> ordenaCampanhaCronologia(){		
+		List<Campanha> campanhas = campanhasRepository.findAll();
+		Collections.sort(campanhas, cd);
+		return campanhas;
+	}
+	
+	public List<Campanha> ordenaCampanhaLikes(){		
+		List<Campanha> campanhas = campanhasRepository.findAll();
+		Collections.sort(campanhas, cl);
+		return campanhas;
+	}
+	
+	public List<Campanha> ordenaCampanhaMeta(){		
+		List<Campanha> campanhas = campanhasRepository.findAll();
+		Collections.sort(campanhas, cm);
+		return campanhas;
 	}
 	
 	private String recuperaEmailUsuario(Usuario usuario) {
@@ -146,11 +183,11 @@ public class CampanhasService {
 		return emailUsuario;
 	}
 
-	private boolean novoLike(List<Usuario> likes, Usuario usuario) {
+	private boolean verificaLike(Campanha campanha, Usuario usuario) throws ServletException {
 		boolean retorno = false;
-		
-		for(Usuario l : likes) {
-			if(l.getEmail().equals(usuario.getEmail())) {
+		Set<Curtir> likes = campanha.getLikes();
+		for(Curtir l: likes) {
+			if(l.getUsuario().equals(usuario)) {
 				retorno = true;
 			}
 		}

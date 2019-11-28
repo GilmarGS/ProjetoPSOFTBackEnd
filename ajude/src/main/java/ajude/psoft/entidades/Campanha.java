@@ -1,8 +1,6 @@
 package ajude.psoft.entidades;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -12,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import ajude.psoft.entidades.Curtir;
 import ajude.psoft.enums.EnumStatus;
 
 @Entity
@@ -31,8 +30,9 @@ public class Campanha {
 	private Usuario dono; 	
 	@OneToMany(fetch = FetchType.LAZY)
 	private Set<Comentario> comentarios;
-	@OneToMany(fetch = FetchType.EAGER)
-	private List<Usuario> likes;
+	private double valorArrecadado;
+	@OneToMany
+	private Set<Curtir> likes;
 	
 	public Campanha() {
 		
@@ -48,7 +48,7 @@ public class Campanha {
 		this.doacoes = new HashSet<Doacao>();
 		this.dono = dono;
 		this.comentarios = new HashSet<Comentario>();
-		this.likes = new ArrayList<>();
+		this.likes = new HashSet<>();
 
 	}
 	
@@ -124,17 +124,28 @@ public class Campanha {
 		this.dono = dono;
 	}
 
-	public List<Usuario> getLikes() {
+	public Set<Curtir> getLikes() {
 		return likes;
 	}
 
-	public void setLikes(Usuario likes) {
-		this.likes.add(likes);
+	public void setLikes(Set<Curtir> likes) {
+		this.likes = likes;
 	}
 
 	public String getIdURL() {
 		return this.idURL;
 	}
 
+	public double getValorArrecadado() {
+		return valorArrecadado;
+	}
+
+	public void setValorArrecadado(double valorArrecadado) {
+		this.valorArrecadado += valorArrecadado;
+	}
+	
+	public double diferencaMeta() {
+		return getMeta() - getValorArrecadado();
+	}
 }
 	

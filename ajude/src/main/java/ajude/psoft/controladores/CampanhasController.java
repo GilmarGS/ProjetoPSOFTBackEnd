@@ -3,6 +3,7 @@ package ajude.psoft.controladores;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -21,11 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import ajude.psoft.comparadores.ComparadorCampanhaDeadLine;
 import ajude.psoft.entidades.Campanha;
 import ajude.psoft.entidades.Comentario;
 import ajude.psoft.servicos.CampanhasService;
 import ajude.psoft.entidades.Doacao;
 import ajude.psoft.entidades.Usuario;
+import ajude.psoft.repositories.CamapanhasRepository;
 import ajude.psoft.servicos.JWTService;
 
 @RestController
@@ -33,7 +36,7 @@ import ajude.psoft.servicos.JWTService;
 public class CampanhasController {
 	private CampanhasService campanhasService;
 	private JWTService jwtService;
-
+	
 	
 	public CampanhasController(CampanhasService campanhasService, JWTService jwtService) {
 		this.campanhasService = campanhasService;
@@ -88,19 +91,33 @@ public class CampanhasController {
 	public ResponseEntity<Campanha> adicionaLike(@PathVariable long id, @RequestHeader(value = "Authorization") String authorizationHeader)  throws ServletException, Exception {
 		return new ResponseEntity<Campanha>(campanhasService.adicionaLike(id, pegaUsuarioToken(authorizationHeader)), HttpStatus.CREATED);
 	}
-
-	@DeleteMapping("/likes/{id}")
-	@ResponseBody
-	public ResponseEntity<Campanha> apagaLike(@PathVariable long id, @RequestHeader(value = "Authorization") String authorizationHeader) throws ServletException, Exception {
-		return new ResponseEntity<Campanha>(this.campanhasService.apagaLike(id, pegaUsuarioToken(authorizationHeader)), HttpStatus.OK);
-	}
 	
 	@CrossOrigin
 	@PostMapping("/doacoes/{id}")
 	@ResponseBody
 	public ResponseEntity<Campanha> adicionaDoacao(@PathVariable long id, @RequestBody Doacao doacao,  @RequestHeader("Authorization") String header) throws ServletException, Exception {
 		doacao.setDono(pegaUsuarioToken(header));
-		return new ResponseEntity<Campanha>(campanhasService.adicionaDoacao(id, doacao), HttpStatus.CREATED);
+		double arrecadacao = doacao.getDoacoes();
+		return new ResponseEntity<Campanha>(campanhasService.adicionaDoacao(id, doacao, arrecadacao), HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/ordenaMeta")
+	@ResponseBody
+	public List<Campanha> ordenaCampanhaDefault(){
+		return campanhasService.ordenaCampanhaMeta();			
+	}
+	
+	@GetMapping("/ordenaDeadLine")
+	@ResponseBody
+	public List<Campanha> ordenaCampanhaCronologia(){
+		return campanhasService.ordenaCampanhaCronologia();		
+	}
+	
+	@GetMapping("ordenaLikes")
+	@ResponseBody
+	public List<Campanha> ordenaCampanhaMenosLikes(){
+		return campanhasService.ordenaCampanhaCronologia();	
+		
 	}
 	
 	private Usuario pegaUsuarioToken(String header) throws ServletException {
