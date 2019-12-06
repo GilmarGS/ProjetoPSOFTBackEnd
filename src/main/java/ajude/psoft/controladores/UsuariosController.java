@@ -51,7 +51,7 @@ public class UsuariosController {
 		if(existeUsuario(usuario)) {
 			throw new ServletException("Usuario ja esta cadastrado!");
 		}
-		emailService.enviaEmailBoasVindas(usuario.getEmail());
+		//emailService.enviaEmailBoasVindas(usuario.getEmail());
 		return new ResponseEntity<Usuario>(usuariosService.adicionaUsuario(usuario), HttpStatus.CREATED);
 		
 	}
